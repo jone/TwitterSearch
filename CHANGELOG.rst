@@ -1,6 +1,11 @@
 Change history
 **************
 
+1.0.3
+#####
+
+* fix pagination when using max_id in base url
+
 1.0.1
 #####
 

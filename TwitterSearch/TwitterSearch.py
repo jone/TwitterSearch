@@ -11,8 +11,10 @@ from .utils import py3k
 
 try:
     from urllib.parse import parse_qs  # python3
+    from urllib.parse import urlencode
 except ImportError:
     from urlparse import parse_qs  # python2
+    from urllib import urlencode
 
 # determine max int value
 try:
@@ -319,9 +321,11 @@ class TwitterSearch(object):
         if not self.__next_max_id:
             raise TwitterSearchException(1011)
 
-        self.send_search(
-            "%s&max_id=%i" % (self._start_url, self.__next_max_id)
-        )
+        params = parse_qs(self._start_url[1:])
+        params['max_id'] = self.__next_max_id
+        url = self._start_url[0] + urlencode(params, doseq=True)
+
+        self.send_search(url)
         return True
 
     def get_metadata(self):
